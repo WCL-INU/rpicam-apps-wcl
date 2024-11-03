@@ -1,3 +1,7 @@
+dl_dep = dependency('dl', required : true)
+libcamera_dep = dependency('libcamera', required : true)
+opencv_dep = dependency('opencv4', required: true)  # OpenCV 의존성 추가
+
 rpicam_still = executable('rpicam-still', files('rpicam_still.cpp'),
                           include_directories : include_directories('..'),
                           dependencies: [libcamera_dep, boost_dep, opencv_dep],

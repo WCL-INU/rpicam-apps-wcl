@@ -7,6 +7,7 @@ project('rpicam-apps', 'c', 'cpp',
             'cpp_std=c++17',
             'c_std=c11',
             'buildtype=release',
+            'cpp_args=-Wno-sign-compare',
         ],
         license : 'BSD-2-Clause')
 
@@ -14,7 +15,7 @@ meson.add_dist_script('utils' / 'gen-dist.sh')
 
 fs = import('fs')
 
-cpp_arguments = ['-pedantic', '-Wno-unused-parameter', '-faligned-new']
+cpp_arguments = ['-pedantic', '-Wno-unused-parameter', '-faligned-new', '-Wno-sign-compare']
 
 # Needed for file sizes > 32-bits.
 cpp_arguments += '-D_FILE_OFFSET_BITS=64'
