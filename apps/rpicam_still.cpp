@@ -678,7 +678,7 @@ int main(int argc, char *argv[])
 			if (options->verbose >= 2)
 				options->Print();
 
-			event_loop(app);
+			// event_loop(app);
 			// 이미지 캡처 스레드 시작
 			// std::thread captureThread(captureImage);
 			std::thread captureThread(event_loop, std::ref(app));
