@@ -17,6 +17,8 @@ How to build
 3. 컴파일 시 `meson compile -C build -j 1`으로
 4. rpicam-still을 실행한다.
 
+```sudo meson install -C build```
+
 https://docs.google.com/presentation/d/1AZBrW1k9EJjtDUi_Hu6-GYSPejTnApzl8qoSITEDNNA/edit#slide=id.g30b5154426f_0_106
 
 License
