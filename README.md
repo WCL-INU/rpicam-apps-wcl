@@ -8,6 +8,16 @@ Build
 -----
 For usage and build instructions, see the official Raspberry Pi documentation pages [here.](https://www.raspberrypi.com/documentation/computers/camera_software.html#building-libcamera-and-rpicam-apps)        
 
+- `sudo apt install libopencv-dev`를 통해서 opencv library를 설치해줘야함
+
+- ```sudo apt install -y libcamera-dev libepoxy-dev libjpeg-dev libtiff5-dev libpng-dev```
+- ```sudo apt install -y qtbase5-dev libqt5core5a libqt5gui5 libqt5widgets5```
+- ```sudo apt install libavcodec-dev libavdevice-dev libavformat-dev libswresample-dev ```
+
+- ```sudo apt install -y cmake libboost-program-options-dev libdrm-dev libexif-dev```
+- ```sudo apt install -y meson ninja-build```
+- ```sudo apt install -y libopencv-dev```
+
 How to build
 -----
 기본적으로 위 링크의 설명을 따라하면 된다.  
@@ -16,8 +26,14 @@ How to build
 2. meson setup 시 `meson setup build -Denable_libav=enabled -Denable_drm=enabled -Denable_egl=enabled -Denable_qt=enabled -Denable_opencv=enabled -Denable_tflite=disabled -Denable_hailo=disabled`으로 
 3. 컴파일 시 `meson compile -C build -j 1`으로
 4. rpicam-still을 실행한다.
+5. 실행하기 전에 `sudo meson install -C build`을 실행시켜준다
+6. rpicam-still을 실행시키지 말고 rpicam-honeybee를 실행시키면 된다.
+7. rpicam-honeybee는 2024년 11월 18일자로 생성하였으며 기존에 코드 수정로그는 rpicam-still 코드를 보면 된다
+8. 2024년 11월 18일자로 rpicam-still은 기존 원본 rpicam-still로 롤백시켜놨다.
+9. 실행은 `rpicam-honeybee --qt --encoding=bmp`으로 실행시키면 된다 ~카더라~
 
-```sudo meson install -C build```
+
+
 
 https://docs.google.com/presentation/d/1AZBrW1k9EJjtDUi_Hu6-GYSPejTnApzl8qoSITEDNNA/edit#slide=id.g30b5154426f_0_106
 
