@@ -8,15 +8,14 @@ Build
 -----
 For usage and build instructions, see the official Raspberry Pi documentation pages [here.](https://www.raspberrypi.com/documentation/computers/camera_software.html#building-libcamera-and-rpicam-apps)        
 
-- `sudo apt install libopencv-dev`를 통해서 opencv library를 설치해줘야함
-
-- ```sudo apt install -y libcamera-dev libepoxy-dev libjpeg-dev libtiff5-dev libpng-dev```
-- ```sudo apt install -y qtbase5-dev libqt5core5a libqt5gui5 libqt5widgets5```
-- ```sudo apt install libavcodec-dev libavdevice-dev libavformat-dev libswresample-dev ```
-
-- ```sudo apt install -y cmake libboost-program-options-dev libdrm-dev libexif-dev```
-- ```sudo apt install -y meson ninja-build```
-- ```sudo apt install -y libopencv-dev```
+```bash
+sudo apt install -y libcamera-dev libepoxy-dev libjpeg-dev libtiff5-dev libpng-dev
+sudo apt install -y qtbase5-dev libqt5core5a libqt5gui5 libqt5widgets5
+sudo apt install -y libavcodec-dev libavdevice-dev libavformat-dev libswresample-dev
+sudo apt install -y cmake libboost-program-options-dev libdrm-dev libexif-dev
+sudo apt install -y meson ninja-build
+sudo apt install -y libopencv-dev
+```
 
 How to build
 -----
