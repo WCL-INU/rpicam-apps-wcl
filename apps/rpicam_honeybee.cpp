@@ -51,6 +51,11 @@ using libcamera::Stream;
 #include <cmath>
 #include <tuple>
 
+#include <curl/curl.h>
+#include <ctime>
+
+#define DEVICE_ID 35
+
 //debug 208~213
 //debug 468~497
 #define CKSFC 15
@@ -259,8 +264,8 @@ void binConvImage() {
         {
             //binary image show
             //Use only in degugging
-            cv::imshow("Binary Image", frame * 255);
-            cv::waitKey(1); // 짧은 대기 시간으로 업데이트
+            // cv::imshow("Binary Image", frame * 255);
+            // cv::waitKey(1); // 짧은 대기 시간으로 업데이트
         }
         // 이미지 처리 (여기서는 단순히 화면에 표시)
         // cv::imshow("Binary Image", frame * 255);
@@ -455,6 +460,9 @@ void traceSecondDerivate(){
 
 void calculateDistance(){
 
+    std::string url = "http://wcl.inu.ac.kr/honeybee/api/uplink";
+    int frameCount = 0;
+
     // std::vector<cv::Point> previous;
     // std::vector<cv::Point> now;
     std::vector<std::tuple<cv::Point, int>> previous;
@@ -541,8 +549,8 @@ void calculateDistance(){
                         cv::circle(pointImage, std::get<0>(now[i]),4,cv::Scalar(0,0,255),-1);
                     }
 
-                    cv::imshow("pointImage",pointImage);
-                    cv::waitKey(1);
+                    // cv::imshow("pointImage",pointImage);
+                    // cv::waitKey(1);
         }
 
         for (size_t i = 0; i < usedNow.size(); ++i) {
@@ -577,6 +585,71 @@ void calculateDistance(){
         }
 
         std::cout << "Count / Entry / Exit : " << now.size() << " / " << entry_count << " / " << exit_count << std::endl;
+        frameCount++;
+        if(frameCount==250){
+            // 현재 시간 가져오기
+            std::time_t now = std::time(nullptr);
+            std::tm localTime = *std::localtime(&now);
+
+            // 현재 날짜와 시간 포맷팅
+            std::ostringstream oss;
+            oss << "/home/pi/Pictures/"
+                << std::put_time(&localTime, "%Y-%m-%d_%H-%M-%S") << ".jpg";
+
+            std::string filename = oss.str();
+
+            // 이미지를 파일로 저장
+            if (cv::imwrite(filename, pointImage)) {
+                std::cout << "Image saved to: " << filename << std::endl;
+            } else {
+                std::cerr << "Failed to save image to: " << filename << std::endl;
+            }
+        }
+        if(frameCount>500){
+            std::string jsonData = 
+                "{"
+                "\"id\": " + std::to_string(DEVICE_ID) + ","
+                "\"type\": " + std::to_string(3) + ","
+                "\"inField\": " + std::to_string(exit_count) + ","
+                "\"outField\": " + std::to_string(entry_count) + 
+                "}";
+
+            // libcurl 초기화
+            CURL *curl;
+            CURLcode res;
+
+            curl = curl_easy_init();
+            if (curl) {
+                // 요청 설정
+                curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+                curl_easy_setopt(curl, CURLOPT_POST, 1L);
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, jsonData.c_str());
+
+                // 헤더 설정 (JSON 전송)
+                struct curl_slist *headers = NULL;
+                headers = curl_slist_append(headers, "Content-Type: application/json");
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+
+                // 요청 실행
+                res = curl_easy_perform(curl);
+
+                // 결과 확인
+                if (res != CURLE_OK) {
+                    std::cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << std::endl;
+                } else {
+                    long response_code;
+                    curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response_code);
+                    std::cout << "Response Code: " << response_code << std::endl;
+                }
+
+                // 리소스 정리
+                curl_slist_free_all(headers);
+                curl_easy_cleanup(curl);
+            }
+            frameCount = 0;
+            entry_count = 0;
+            exit_count = 0;
+        }
 
         previous.clear();
         previous = now;
