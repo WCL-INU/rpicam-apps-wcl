@@ -1,10 +1,11 @@
 dl_dep = dependency('dl', required : true)
 libcamera_dep = dependency('libcamera', required : true)
 opencv_dep = dependency('opencv4', required: true)  # OpenCV 의존성 추가
+curl_dep = dependency('libcurl', required: true)  # libcurl 의존성 추가
 
 rpicam_honeybee = executable('rpicam-honeybee', files('rpicam_honeybee.cpp'),
                           include_directories : include_directories('..'),
-                          dependencies: [libcamera_dep, boost_dep, opencv_dep],
+                          dependencies: [libcamera_dep, boost_dep, opencv_dep, curl_dep],
                           link_with : rpicam_app,
                           install : true)
 
