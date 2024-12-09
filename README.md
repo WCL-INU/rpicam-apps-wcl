@@ -16,7 +16,7 @@ sudo apt install -y libavcodec-dev libavdevice-dev libavformat-dev libswresample
 sudo apt install -y cmake libboost-program-options-dev libdrm-dev libexif-dev
 sudo apt install -y meson ninja-build
 sudo apt install -y libopencv-dev
-meson setup build -Denable_libav=enabled -Denable_drm=enabled -Denable_egl=enabled -Denable_qt=enabled -Denable_opencv=enabled -Denable_tflite=disabled -Denable_hailo=disabled
+meson setup build -Denable_libav=enabled -Denable_drm=enabled -Denable_egl=enabled -Denable_qt=enabled -Denable_opencv=enabled -Denable_tflite=disabled -Denable_hailo=disabled -Denable_imx500=false
 ```
 
 - 컴파일과 설치를 한 번에
