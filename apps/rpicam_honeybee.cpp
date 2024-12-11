@@ -54,7 +54,7 @@ using libcamera::Stream;
 #include <curl/curl.h>
 #include <ctime>
 
-#define DEVICE_ID 35
+#define DEVICE_ID 38
 
 //debug 208~213
 //debug 468~497
@@ -166,15 +166,11 @@ static cv::Mat save_image_as_mat(RPiCamStillApp &app, CompletedRequestPtr &paylo
 // main 루프 내에서 호출하는 부분
 static void event_loop(RPiCamStillApp &app)
 {
-	StillOptions const *options = app.GetOptions();
-	std::cout << "ENCODING: " << options->encoding << std::endl;
 	unsigned int still_flags = RPiCamApp::FLAG_STILL_NONE;
 	still_flags |= RPiCamApp::FLAG_STILL_RGB;
 
-	// Options const *options = app.GetOptions();
 	app.OpenCamera();
 	app.ConfigureStill(still_flags);
-	// app.ConfigureViewfinder();
 	app.StartCamera();
 
 	for (unsigned int count = 0;; count++)
@@ -229,7 +225,7 @@ static void event_loop(RPiCamStillApp &app)
 
         auto loop_end = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> elapsed = loop_end - loop_start;
-        std::cout << "Elapsed time: " << elapsed.count() << " seconds" << std::endl;
+        // std::cout << "Elapsed time: " << elapsed.count() << " seconds" << std::endl;
  
         if (elapsed.count() < frameInterval) {
             std::this_thread::sleep_for(std::chrono::milliseconds(frameInterval) - elapsed);
@@ -584,9 +580,9 @@ void calculateDistance(){
             }
         }
 
-        std::cout << "Count / Entry / Exit : " << now.size() << " / " << entry_count << " / " << exit_count << std::endl;
+        // std::cout << "Count / Entry / Exit : " << now.size() << " / " << entry_count << " / " << exit_count << std::endl;
         frameCount++;
-        if(frameCount==250){
+        if(frameCount>500){
             // 현재 시간 가져오기
             std::time_t now = std::time(nullptr);
             std::tm localTime = *std::localtime(&now);
@@ -639,7 +635,7 @@ void calculateDistance(){
                 } else {
                     long response_code;
                     curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response_code);
-                    std::cout << "Response Code: " << response_code << std::endl;
+                    std::cout << " Response Code: " << response_code << std::endl;
                 }
 
                 // 리소스 정리
