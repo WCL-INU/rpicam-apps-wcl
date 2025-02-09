@@ -149,12 +149,6 @@ cv::Mat createCircularKernel(int radius)
 
 /////////////////////////////////////////////////////////////////////
 
-// OpenCV에서 사용할 Mat로 변환하는 함수
-cv::Mat libcamera_to_mat(const std::vector<libcamera::Span<uint8_t>> &mem, int width, int height)
-{
-	return cv::Mat(height, width, CV_8UC3, (void *)mem[0].data());
-}
-
 // // 이미지를 캡처하고 OpenCV Mat으로 변환하는 함수
 static cv::Mat save_image_as_mat(RPiCamStillApp &app, CompletedRequestPtr &payload, Stream *stream)
 {
@@ -163,7 +157,9 @@ static cv::Mat save_image_as_mat(RPiCamStillApp &app, CompletedRequestPtr &paylo
 	const std::vector<libcamera::Span<uint8_t>> mem = r.Get();
 
 	// 이미지를 cv::Mat으로 변환
-	cv::Mat img = libcamera_to_mat(mem, info.width, info.height);
+	// cv::Mat은 기본적으로 sallow copy를 함. clone을 하여 deep copy가 이뤄지도록 함.
+	cv::Mat sallow = cv::Mat(info.height, info.width, CV_8UC3, (void *)mem[0].data());
+	cv::Mat img = sallow.clone();
 
 	return img;
 }
