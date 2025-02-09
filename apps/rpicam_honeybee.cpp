@@ -198,6 +198,15 @@ static void event_loop(RPiCamStillApp &app)
 
 		// 블루 채널만 추출하여 그레이스케일 이미지로 변환
 		cv::Mat crop = capture(roi);
+		
+		// 만약 평균이 120보다 작으면 무시(어두운 이미지)
+		auto m = cv::mean(crop);
+		// std::cout << m << std::endl;
+		if (m[0] < 120)
+		{
+			continue;
+		}
+
 		{
 			originalImage.push(crop);
 		}
