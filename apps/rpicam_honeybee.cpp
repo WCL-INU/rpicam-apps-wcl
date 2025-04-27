@@ -54,7 +54,17 @@ using libcamera::Stream;
 #include <ctime>
 #include <curl/curl.h>
 
-#define DEVICE_ID 38
+const int DEVICE_ID = []() -> int {
+	const char * envVar = std::getenv("DEVICE_ID");
+	if (envVar) {
+		try {
+			return std::stoi(envVar);
+		} catch (const std::exception& e) {
+			std::cerr << "conversion error: " << e.what() << std::endl;
+		}
+	}
+	return 0;
+}();
 
 //debug 208~213
 //debug 468~497
@@ -730,6 +740,8 @@ int main(int argc, char *argv[])
 
 		// circle = createCustomKernel();
 		circle = createCircularKernel(CKSFC);
+
+		std::cout << "detected DEVICE_ID: " << std::to_string(DEVICE_ID) << std::endl;
 
 		/////////////////////////////////////////////////////////////////////
 
