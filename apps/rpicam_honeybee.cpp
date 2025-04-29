@@ -462,20 +462,24 @@ void traceSecondDerivate()
 			}
 		}
 
-		for (int i = 0; i < centers.size(); i++)
-		{
-			for (int j = i + 1; j < centers.size(); j++)
-			{
-				double distance = calculateEuclidDistance(std::get<0>(centers[i]), std::get<0>(centers[j]));
-				// std::cout << distance << " / ";
-				if (distance < 11)
-				{
+		// 중복된 중심점 제거
+		for (size_t i = 0; i < centers.size(); ++i) {
+			// j 는 i+1 부터 시작, erase 할 때만 증감하지 않음
+			for (size_t j = i + 1; j < centers.size(); /* no ++j here */) {
+				double distance = calculateEuclidDistance(
+					std::get<0>(centers[i]),
+					std::get<0>(centers[j])
+				);
+				if (distance < 11) {
+					// 중복 판단되면 j 위치 요소 삭제, 다음 요소가 j 에 오게 함
 					centers.erase(centers.begin() + j);
-					i--;
-					j--;
+				} else {
+					// 중복 아니면 다음 j 로
+					++j;
 				}
 			}
 		}
+
 		// std::cout<<std::endl;
 
 		// cv::imshow("center",center * 100);
