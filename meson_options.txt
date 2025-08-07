@@ -46,10 +46,15 @@ option('download_hailo_models',
 
 option('enable_imx500',
         type : 'boolean',
-        value : true,
+        value : false,
         description : 'Enable IMX500 postprocessing support')
 
 option('download_imx500_models',
         type : 'boolean',
-        value : true,
+        value : false,
         description : 'Download and install the IMX500 postprocessing models')
+
+option('disable_rpi_features',
+        type : 'boolean',
+        value : false,
+        description : 'Disable use Raspberry Pi specific extensions in the build')
