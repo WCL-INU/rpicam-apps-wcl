@@ -755,8 +755,8 @@ int main(int argc, char *argv[])
 
 		if (options->Parse(argc, argv))
 		{
-			if (options->verbose >= 2)
-				options->Print();
+			if (options->Get().verbose >= 2)
+				options->Get().Print();
 
 			// event_loop(app);
 			// 이미지 캡처 스레드 시작
