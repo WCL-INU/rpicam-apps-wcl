@@ -470,20 +470,26 @@ void traceSecondDerivate()
 			}
 		}
 
-		for (int i = 0; i < centers.size(); i++)
-		{
-			for (int j = i + 1; j < centers.size(); j++)
-			{
-				double distance = calculateEuclidDistance(std::get<0>(centers[i]), std::get<0>(centers[j]));
-				// std::cout << distance << " / ";
-				if (distance < 11)
-				{
-					centers.erase(centers.begin() + j);
-					i--;
-					j--;
-				}
-			}
-		}
+                // Remove points that are too close to each other. The previous
+                // implementation modified the loop variable `i` inside the inner
+                // loop which could make `i` negative and lead to invalid vector
+                // indexing.  Use size_t indices and only adjust the inner index
+                // when erasing to keep the iteration valid.
+                for (size_t i = 0; i < centers.size(); ++i)
+                {
+                        for (size_t j = i + 1; j < centers.size();)
+                        {
+                                double distance = calculateEuclidDistance(std::get<0>(centers[i]), std::get<0>(centers[j]));
+                                if (distance < 11)
+                                {
+                                        centers.erase(centers.begin() + j);
+                                }
+                                else
+                                {
+                                        ++j;
+                                }
+                        }
+                }
 		// std::cout<<std::endl;
 
 		// cv::imshow("center",center * 100);
