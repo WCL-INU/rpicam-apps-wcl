@@ -678,9 +678,7 @@ void calculateDistance()
 			{
 				std::cerr << "Failed to save image to: " << filename << std::endl;
 			}
-		}
-		if (frameCount > 500)
-		{
+		
 			std::string jsonData = "{"
 								   "\"id\": " +
 								   std::to_string(DEVICE_ID) +
@@ -705,6 +703,10 @@ void calculateDistance()
 				curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
 				curl_easy_setopt(curl, CURLOPT_POST, 1L);
 				curl_easy_setopt(curl, CURLOPT_POSTFIELDS, jsonData.c_str());
+				
+				curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);      // 리다이렉트 허용
+				curl_easy_setopt(curl, CURLOPT_MAXREDIRS, 5L);           // 최대 5번까지
+				curl_easy_setopt(curl, CURLOPT_POSTREDIR, CURL_REDIR_POST_ALL); // POST 유지
 
 				// 헤더 설정 (JSON 전송)
 				struct curl_slist *headers = NULL;
